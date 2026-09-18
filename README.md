@@ -11,7 +11,7 @@ API privada que autentica no WebFacta, mantém os cookies de sessão e consulta 
 Exemplo JSON:
 
 ```bash
-curl -X POST http://localhost:3000/consultar \
+curl -X POST http://localhost:4545/consultar \
   -H "Content-Type: application/json" \
   -H "x-api-key: SUA_API_KEY" \
   -d '{"cpfs":["12345678912","2855325536","5325536"]}'
@@ -22,7 +22,7 @@ Para CSV, use `POST /consultar?formato=csv`.
 ## EasyPanel
 
 - Crie um app a partir deste repositório usando o `Dockerfile`.
-- Exponha a porta `3000`.
+- Exponha a porta `4545`.
 - Cadastre como variáveis/segredos: `API_KEY`, `WEBFACTA_USER`, `WEBFACTA_PASSWORD` e `WEBFACTA_BASE_URL`.
 - Opcionalmente ajuste `REQUEST_DELAY_MS` e `MAX_CPFS_PER_REQUEST`.
 
