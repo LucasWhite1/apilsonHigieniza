@@ -19,20 +19,17 @@ const app = express();
 
 app.set("trust proxy", 1);
 
-// 1. Defina o Helmet liberando políticas de Cross-Origin se a API for pública
+// 1. Defina o Helmet liberando políticas de Cross-Origin
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
-// 2. Configure o CORS com a string "*" ou true
+// 2. Configure o CORS (o cors() já trata as requisições OPTIONS automaticamente)
 app.use(cors({
-  origin: "*", // Alterado de ["*"] para "*"
+  origin: "*",
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "x-api-key"]
 }));
-
-// Responder explicitamente às requisições preflight (OPTIONS)
-app.options('*', cors());
 
 app.use(express.json({ limit: "100kb" }));
 
@@ -41,7 +38,7 @@ app.use(rateLimit({ windowMs: 60_000, limit: 30, standardHeaders: 'draft-8' }));
 app.get('/health', (_req, res) => res.json({ ok: true }));
 
 app.use((req, res, next) => {
-  // Permite passar requisições de preflight sem barrar no x-api-key
+  // Bypassa a verificação da API Key em chamadas Preflight (OPTIONS)
   if (req.method === 'OPTIONS') {
     return next();
   }
