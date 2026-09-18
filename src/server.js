@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from "cors";
 import helmet from 'helmet';
 import { rateLimit } from 'express-rate-limit';
 import { loadConfig } from './config.js';
@@ -15,9 +16,19 @@ const client = new WebFactaClient({
 });
 
 const app = express();
-app.set('trust proxy', 1);
+
+app.set("trust proxy", 1);
+
+app.use(cors({
+  origin: ["*"],
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "x-api-key"]
+}));
+
 app.use(helmet());
-app.use(express.json({ limit: '100kb' }));
+app.use(express.json({ limit: "100kb" }));
+
+
 app.use(rateLimit({ windowMs: 60_000, limit: 30, standardHeaders: 'draft-8' }));
 
 app.get('/health', (_req, res) => res.json({ ok: true }));
